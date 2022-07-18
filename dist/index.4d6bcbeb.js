@@ -7354,15 +7354,18 @@ var _jQuery = require("jQuery");
 var _jQueryDefault = parcelHelpers.interopDefault(_jQuery);
 const $tabBar = (0, _jQueryDefault.default)("#app2 .tab-bar");
 const $tabContent = (0, _jQueryDefault.default)("#app2 .tab-content");
+const localKey = "app2.index";
+const index = localStorage.getItem(localKey) || 0;
 $tabBar.on("click", "li", (e)=>{
     const $li = (0, _jQueryDefault.default)(e.currentTarget);
     $li.addClass("selected").siblings().removeClass("selected");
-    const index = $li.index();
-    $tabContent.children().eq(index).addClass("active")/*样式与行为分离,不直接用css,
+    const index1 = $li.index();
+    localStorage.setItem(localKey, index1);
+    $tabContent.children().eq(index1).addClass("active")/*样式与行为分离,不直接用css,
      通过添加一个类来进行css样式的添加*/ .siblings().removeClass("active");
 //通过监听子元素的点击事件来监听父元素
 });
-$tabBar.children().eq(0).trigger("click");
+$tabBar.children().eq(index).trigger("click");
 
 },{"jQuery":"kMzDr","@parcel/transformer-js/src/esmodule-helpers.js":"gVBIV","./app2.css":"8RnuD"}],"kMzDr":[function(require,module,exports) {
 /*!
@@ -14105,12 +14108,25 @@ $tabBar.children().eq(0).trigger("click");
 
 },{}],"8RnuD":[function() {},{}],"264pe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _app3Css = require("./app3.css");
 var _jQuery = require("jQuery");
 var _jQueryDefault = parcelHelpers.interopDefault(_jQuery);
+var _app3Css = require("./app3.css");
 const $square = (0, _jQueryDefault.default)("#app3 .square");
+const localKey = "app3.active";
+const active = localStorage.getItem(localKey) === "yes" //把字符串变成布尔值
+;
+if (active) $square.addClass("active");
+else $square.removeClass("active");
+//可以换成$square.toggleClass('active',active)
 $square.on("click", ()=>{
-    $square.toggleClass("active");
+    if ($square.hasClass("active")) {
+        $square.removeClass("active");
+        localStorage.setItem(localKey, "no") //setItem只支持字符串
+        ;
+    } else {
+        $square.addClass("active");
+        localStorage.setItem("app3.active", "yes");
+    }
 });
 
 },{"jQuery":"kMzDr","@parcel/transformer-js/src/esmodule-helpers.js":"gVBIV","./app3.css":"iOgrn"}],"iOgrn":[function() {},{}],"6ZENx":[function(require,module,exports) {
